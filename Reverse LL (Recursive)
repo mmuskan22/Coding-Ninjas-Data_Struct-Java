@@ -1,0 +1,15 @@
+public static LinkedListNode<Integer> reverseLinkedListRec(LinkedListNode<Integer> head) {
+		
+        if(head==null || head.next==null)
+            return head;
+    
+        LinkedListNode<Integer> head1=reverseLinkedListRec(head.next);
+        LinkedListNode<Integer> temp=head1;
+        while(temp.next!=null)
+        {
+            temp=temp.next;
+        } 
+        temp.next=head;
+        head.next=null;
+        return head1;
+	}
