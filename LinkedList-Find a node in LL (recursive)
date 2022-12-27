@@ -40,19 +40,16 @@ Sample Output 2 :
 
 public static int findNodeRec(LinkedListNode<Integer> head, int n) {
     
+       return findNode(head,0,n);
+  }
+    public static int findNode(LinkedListNode<Integer> head,int index ,int n)
+    {
         if(head==null)
             return -1;
-        LinkedListNode<Integer> temp=head;
-        int cnt=0;
-        while(temp!=null)
-        {
-            if(temp.data==n)
-            {
-                return cnt;
-            }
-            temp=temp.next;
-            cnt++;
-        }
-        return -1;
+        if(head.data==n)
+            return index;
+        int ans=findNode(head.next,index+1,n);
+        return ans;
+    }
         
         
