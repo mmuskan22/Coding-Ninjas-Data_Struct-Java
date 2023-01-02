@@ -1,1 +1,1 @@
-# Coding Ninjas-Data_Struct-Java
+# CN-Data_Struct-Java
