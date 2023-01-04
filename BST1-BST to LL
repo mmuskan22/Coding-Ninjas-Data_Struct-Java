@@ -1,0 +1,71 @@
+Given a BST, convert it into a sorted linked list. You have to return the head of LL.
+Input format:
+The first and only line of input contains data of the nodes of the tree in level order form. The data of the nodes of the tree is separated by space. If any node does not have left or right child, take -1 in its place. Since -1 is used as an indication whether the left or right nodes exist, therefore, it will not be a part of the data of any node.   
+Output Format:
+The first and only line of output prints the elements of sorted linked list.
+Constraints:
+Time Limit: 1 second
+Sample Input 1:
+8 5 10 2 6 -1 -1 -1 -1 -1 7 -1 -1
+Sample Output 1:
+2 5 6 7 8 10
+
+*********************************Solution********************************
+
+class QueueUsing<T>
+{
+	T head;
+    T tail;
+}
+
+public class Solution {
+
+	public static LinkedListNode<Integer> constructLinkedList(BinaryTreeNode<Integer> root) {
+		QueueUsing<LinkedListNode<Integer>> queueNode=constructHelper(root);
+		return queueNode.head;
+	}
+  
+	public static QueueUsing<LinkedListNode<Integer>> constructHelper(BinaryTreeNode<Integer> root)
+	{
+		if(root==null)
+			return new QueueUsing<LinkedListNode<Integer>>();
+		if(root.left==null && root.right==null)
+		{
+			QueueUsing<LinkedListNode<Integer>> queueNode= new QueueUsing<LinkedListNode<Integer>>();
+			queueNode.head=new LinkedListNode<Integer>(root.data);
+			queueNode.tail=null;
+			return queueNode;
+		}
+		QueueUsing<LinkedListNode<Integer>> queueNodeLeft= constructHelper(root.left);
+		QueueUsing<LinkedListNode<Integer>> queueNodeRight=constructHelper(root.right);
+		QueueUsing<LinkedListNode<Integer>> queueNode= new QueueUsing<LinkedListNode<Integer>>();
+		LinkedListNode<Integer> newNode= new LinkedListNode<Integer>(root.data);
+
+		if(queueNodeLeft.head==null)
+		{
+			queueNode.head=newNode;
+		}
+		else
+		{
+			queueNode.head=queueNodeLeft.head;
+		}
+		if(queueNodeLeft.tail==null)
+		{
+			queueNode.head.next=newNode;
+			queueNode.tail=newNode;
+		}
+		else{
+			queueNodeLeft.tail.next=newNode;
+			queueNode.tail=newNode;
+		}
+		if(queueNodeRight.head!=null)
+		{
+			queueNode.tail.next=queueNodeRight.head;
+			queueNode.tail=queueNodeRight.head;
+		}
+		if(queueNodeRight.tail!=null)
+			queueNode.tail=queueNodeRight.tail;
+		
+		return queueNode;
+	}
+}
