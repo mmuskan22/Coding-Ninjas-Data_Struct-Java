@@ -1,0 +1,164 @@
+Implement the BST class which includes following functions -
+1. insert -
+Given an element, insert that element in the BST at the correct position. If element is equal to the data of the node, insert it in the left subtree.
+2. search
+Given an element, find if that is present in BST or not. Return true or false.
+3. delete -
+Given an element, remove that element from the BST. If the element which is to be deleted has both children, replace that with the minimum element from right sub-tree.
+4. printTree (recursive) -
+Print the BST in in the following format -
+For printing a node with data N, you need to follow the exact format -
+N:L:x,R:y
+where, N is data of any node present in the binary tree. x and y are the values of left and right child of node N. Print the children only if it is not null.
+There is no space in between.
+You need to print all nodes in the recursive format in different lines.
+
+******************************Solution*********************************
+
+class BSTDeleteReturn {
+
+	BinaryTreeNode<Integer> root;
+	boolean deleted;
+
+	public BSTDeleteReturn(BinaryTreeNode<Integer> root, boolean deleted) 
+	{
+		this.root = root;
+		this.deleted = deleted;
+	}
+}
+
+public class BinarySearchTree {
+
+	private BinaryTreeNode<Integer> root;
+	private int size;
+
+
+	public void insert(int data) {
+		
+		root= insertHelper(root,data);
+		size++;
+	}
+
+	private static BinaryTreeNode<Integer> insertHelper(BinaryTreeNode<Integer> root, int data)
+	{
+		if (root==null)
+		{
+			BinaryTreeNode<Integer> newRoot = new BinaryTreeNode<Integer>(data);
+			return newRoot;
+		}
+		
+		if (data>root.data)
+		{
+			root.right= insertHelper(root.right,data);
+		}
+		else
+		{
+			root.left= insertHelper(root.left,data);
+		}
+		return root;
+	}
+	
+  
+	public void remove(int data) {
+		
+		BSTDeleteReturn output = removeHelper(root, data);
+		root = output.root;
+		if (output.deleted) 
+		{
+			size--;
+		}
+	}
+  
+	private static BSTDeleteReturn removeHelper(BinaryTreeNode<Integer> root, int data)
+	{
+		if(root==null)
+		{
+			return new BSTDeleteReturn(null, false);
+		}
+		if(root.data<data)
+		{
+			BSTDeleteReturn ansRight= removeHelper(root.right, data);
+			root.right=ansRight.root;
+			ansRight.root=root;
+			return ansRight;
+		}
+		if(root.data>data)
+		{
+			BSTDeleteReturn ansLeft=removeHelper(root.left, data);
+			root.left=ansLeft.root;
+			ansLeft.root=root;
+			return ansLeft;
+		}
+
+		if(root.left==null && root.right==null)
+			return new BSTDeleteReturn(null, true);
+
+		if(root.left!=null && root.right==null)
+			return new BSTDeleteReturn(root.left, true);
+		
+		if(root.left==null && root.right!=null )
+			return new BSTDeleteReturn(root.right, true);
+
+		int rightsmall=minimum(root.right);
+		root.data=rightsmall;
+		BSTDeleteReturn ansRight= removeHelper(root.right, rightsmall);
+		root.right=ansRight.root;
+		return new BSTDeleteReturn(root, true);
+	}
+  
+	private static int minimum(BinaryTreeNode<Integer> root)
+	{
+		if(root==null)
+		{
+			return Integer.MAX_VALUE;
+		}
+		int leftMin=minimum(root.left);
+		int rightMin=minimum(root.right);
+		return Math.min(root.data, Math.min(leftMin, rightMin));
+	}
+	
+	public void printTree() {
+		printHelper(root);
+	}
+
+	private static void printHelper(BinaryTreeNode<Integer> root)
+	{
+		if (root==null)
+		{
+			return;
+		}
+		System.out.print(root.data+":");
+		if (root.left!=null)
+		{
+			System.out.print("L:"+root.left.data+",");
+		}
+		if (root.right!=null)
+		{
+			System.out.print("R:"+root.right.data);			
+		}
+		System.out.println();
+		printHelper(root.left);
+		printHelper(root.right);
+	}
+	
+	public boolean search(int data) {
+
+		return searchHelper(root, data);
+	}
+  
+	private static boolean searchHelper(BinaryTreeNode<Integer> root, int data)
+	{
+		if(root==null)
+			return false;
+		if(root.data==data)
+			return true;
+		if(data<root.data)
+		{
+			return searchHelper(root.left, data);
+		}
+		else{
+			return searchHelper(root.right, data);
+		}
+	}
+
+}
